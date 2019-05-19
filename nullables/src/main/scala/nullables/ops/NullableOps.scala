@@ -86,6 +86,9 @@ class NullableOps[A](private val value: Nullable[A]) extends AnyVal { self =>
 
   def toLeft[X](right: => X): Either[A, X] =
     fold(Right(right): Either[A, X])(Left(_))
+
+  def toOption: Option[A] =
+    fold(None: Option[A])(Some(_))
 }
 
 class NullableWithFilter[A](value: Nullable[A])(p: A => Boolean) {
