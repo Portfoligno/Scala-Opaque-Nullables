@@ -4,9 +4,9 @@ package object nullables {
   type InherentNullness[+A] = scala.Null <:< A
 
 
-  type Null = Nullable[Nothing] with Null.Tag
+  type Null = Nullable.Base with Null.Tag
 
-  type NonNull[+A] = Nullable[A] with NonNull.Tag
+  type NonNull[+A] = Nullable.Base with NonNull.Tag
 
   type Nullable[+A] = Nullable.Base with Nullable.Tag
 
