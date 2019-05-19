@@ -6,13 +6,13 @@ package object nullables {
 
   type Null = Nullable.Base with Null.Tag
 
-  type NonNull[+A] = Nullable.Base with NonNull.Tag
+  type NonNull[+A] = Nullable.Base with NonNull.Tag[A]
 
-  type Nullable[+A] = Nullable.Base with Nullable.Tag
+  type Nullable[+A] = Nullable.Base with Nullable.Tag[A]
 
 
   object Null {
-    private[nullables] trait Tag extends Nullable.Tag
+    private[nullables] trait Tag extends Nullable.Tag[Nothing]
 
     def apply(): Null =
       null
@@ -22,7 +22,7 @@ package object nullables {
   }
 
   object NonNull {
-    private[nullables] trait Tag extends Nullable.Tag
+    private[nullables] trait Tag[+A] extends Nullable.Tag[A]
 
     def apply[A](value: A): NonNull[A] = {
       val r =
@@ -44,7 +44,7 @@ package object nullables {
 
   object Nullable {
     private[nullables] type Base = Any { type Tag }
-    private[nullables] trait Tag extends Any
+    private[nullables] trait Tag[+A] extends Any
 
     def fromInherentNullable[A : InherentNullness](value: A): Nullable[A] =
       value.asInstanceOf[Nullable[A]]

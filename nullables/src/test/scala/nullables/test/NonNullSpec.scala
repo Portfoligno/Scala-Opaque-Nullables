@@ -7,7 +7,7 @@ import nullables.{LiftedNull, NonNull, Null, Nullable}
 
 @RunWith(classOf[JUnitRunner])
 class NonNullSpec extends FreeSpec {
-  "NonNull" - {
+  "`NonNull`" - {
     "`apply` should work" in {
       NonNull(null) === LiftedNull(null)
       NonNull(NonNull(null)) === LiftedNull(LiftedNull(null))
