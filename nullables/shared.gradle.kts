@@ -45,6 +45,9 @@ dependencies {
     scalaCompilerPlugin("org.scalamacros", "paradise_$scalaVersion", "2.1.1")
   }
   "api"("org.scala-lang", "scala-library", scalaVersion)
+
+  "testImplementation"("junit", "junit", "4.12")
+  "testImplementation"("org.scalatest", "scalatest_$dependencyScalaVersion", scalaTestVersion)
 }
 
 var BaseScalaCompileOptions.parameters: List<String>
