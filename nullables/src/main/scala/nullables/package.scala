@@ -46,10 +46,13 @@ package object nullables {
     def fromInherentNullable[A : InherentNullness](value: A): Nullable[A] =
       value.asInstanceOf[Nullable[A]]
 
+    def fromOption[A](option: Option[A]): Nullable[A] =
+      option match {
+        case Some(a) => NonNull(a)
+        case None => Null()
+      }
+
     implicit def toNullableOps[A](value: Nullable[A]): NullableOps[A] =
-      new NullableOps[A](value match {
-        case null => null
-        case _ => value
-      })
+      new NullableOps[A](value)
   }
 }
