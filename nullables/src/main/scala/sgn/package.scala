@@ -48,5 +48,11 @@ package object sgn {
 
     def toInherentNullable[A : InherentNullness](value: Nullable[A]): A =
       value.asInstanceOf[A]
+
+    implicit def toNullableOps[A](value: Nullable[A]): NullableOps[A] =
+      new NullableOps[A](value match {
+        case null => BoxedNull
+        case _ => null
+      })
   }
 }
