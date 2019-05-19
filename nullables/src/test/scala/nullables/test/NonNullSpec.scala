@@ -26,5 +26,11 @@ class NonNullSpec extends FreeSpec {
         case NonNull("") =>
       }
     }
+
+    "`value` should work" in {
+      assert(NonNull(null: String).value === null)
+      assert(NonNull("").value === "")
+      assert(NonNull(0).value === 0)
+    }
   }
 }

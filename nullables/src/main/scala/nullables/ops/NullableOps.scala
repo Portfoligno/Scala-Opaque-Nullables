@@ -2,7 +2,7 @@ package nullables.ops
 
 import nullables.{InherentNullness, LiftedNull, NonNull, Nullable}
 
-class NullableOps[+A](private val value: Nullable[A]) extends AnyVal { self =>
+class NullableOps[+A](private val value: Nullable[A]) extends AnyVal {
   def isEmpty: Boolean =
     value == null
 
