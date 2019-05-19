@@ -1,9 +1,9 @@
-package sgn.test
+package nullables.test
 
 import org.junit.runner.RunWith
 import org.scalatest.FreeSpec
 import org.scalatestplus.junit.JUnitRunner
-import sgn.{LiftedNull, NonNull, Null, Nullable}
+import nullables.{LiftedNull, NonNull, Null, Nullable}
 
 @RunWith(classOf[JUnitRunner])
 class NonNullSpec extends FreeSpec {

@@ -1,3 +1,3 @@
-package sgn
+package nullables
 
 final case class LiftedNull(value: LiftedNull)

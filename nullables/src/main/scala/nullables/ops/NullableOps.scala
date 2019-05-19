@@ -1,8 +1,8 @@
-package sgn.ops
+package nullables.ops
 
-import sgn.LiftedNull
+import nullables.LiftedNull
 
-class NullableOps[A] private[sgn] (private val value: Any) extends AnyVal {
+class NullableOps[A] private[nullables] (private val value: Any) extends AnyVal {
   def isEmpty: Boolean =
     value == null
 

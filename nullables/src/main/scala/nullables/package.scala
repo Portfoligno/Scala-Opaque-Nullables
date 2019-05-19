@@ -1,6 +1,6 @@
-import sgn.ops.NullableOps
+import nullables.ops.NullableOps
 
-package object sgn {
+package object nullables {
   type InherentNullness[+A] = scala.Null <:< A
 
 
@@ -12,7 +12,7 @@ package object sgn {
 
 
   object Null {
-    private[sgn] trait Tag extends Nullable.Tag
+    private[nullables] trait Tag extends Nullable.Tag
 
     def apply(): Null =
       null
@@ -22,7 +22,7 @@ package object sgn {
   }
 
   object NonNull {
-    private[sgn] trait Tag extends Nullable.Tag
+    private[nullables] trait Tag extends Nullable.Tag
 
     def apply[A](value: A): NonNull[A] = {
       val r =
@@ -40,8 +40,8 @@ package object sgn {
   }
 
   object Nullable {
-    private[sgn] type Base = Any { type Tag }
-    private[sgn] trait Tag extends Any
+    private[nullables] type Base = Any { type Tag }
+    private[nullables] trait Tag extends Any
 
     def fromInherentNullable[A : InherentNullness](value: A): Nullable[A] =
       value.asInstanceOf[Nullable[A]]
