@@ -2,7 +2,7 @@ package nullables.ops
 
 import nullables.{InherentNullness, LiftedNull, NonNull, Nullable}
 
-class NullableOps[A](private val value: Nullable[A]) extends AnyVal { self =>
+class NullableOps[+A](private val value: Nullable[A]) extends AnyVal { self =>
   def isEmpty: Boolean =
     value == null
 
@@ -91,7 +91,7 @@ class NullableOps[A](private val value: Nullable[A]) extends AnyVal { self =>
     fold(None: Option[A])(Some(_))
 }
 
-class NullableWithFilter[A](value: Nullable[A])(p: A => Boolean) {
+class NullableWithFilter[+A](value: Nullable[A])(p: A => Boolean) {
   def map[B](f: A => B): Nullable[B] =
     value.filter(p).map(f)
 
