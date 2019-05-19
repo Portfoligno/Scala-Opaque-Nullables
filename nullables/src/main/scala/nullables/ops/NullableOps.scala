@@ -10,7 +10,7 @@ class NullableOps[A] private[nullables] (private val value: Any) extends AnyVal 
     val r =
       value match {
         case LiftedNull(n) => n
-        case null => throw new NoSuchElementException("Nullable.get")
+        case null => throw new NoSuchElementException("Null().get")
         case _ => value
       }
 
