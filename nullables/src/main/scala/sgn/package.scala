@@ -35,7 +35,7 @@ package object sgn {
       r.asInstanceOf[NonNull[A]]
     }
 
-    def unapply[A](value: NonNull[A]): NullableOps[A] =
+    def unapply[A](value: Nullable[A]): NullableOps[A] =
       value
   }
 
