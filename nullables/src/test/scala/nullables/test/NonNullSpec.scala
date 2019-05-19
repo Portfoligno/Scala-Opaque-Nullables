@@ -25,6 +25,13 @@ class NonNullSpec extends FreeSpec {
       Nullable.fromInherentNullable("") match {
         case NonNull("") =>
       }
+
+      NonNull(null) match {
+        case NonNull(null) =>
+      }
+      NonNull("") match {
+        case NonNull("") =>
+      }
     }
 
     "`value` should work" in {
