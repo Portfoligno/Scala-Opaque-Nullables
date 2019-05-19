@@ -21,5 +21,16 @@ class NullableSpec extends FreeSpec {
       assert(Nullable.toInherentNullable(Null(): Nullable[String]) === null)
       assert(Nullable.toInherentNullable(NonNull(""): Nullable[String]) === "")
     }
+
+    "isEmpty should work" in {
+      assert(Null().isEmpty)
+      assert(!NonNull(null).isEmpty)
+      assert(!NonNull("").isEmpty)
+    }
+    "get should work" in {
+      assertThrows[NoSuchElementException](Null().get)
+      assert(NonNull(null).get === null)
+      assert(NonNull("").get === "")
+    }
   }
 }
