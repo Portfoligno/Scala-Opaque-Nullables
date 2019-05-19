@@ -10,8 +10,8 @@ class NonNullSpec extends FreeSpec {
   "NonNull" - {
     "`apply` should work" in {
       NonNull(null) === LiftedNull(null)
-      NonNull(LiftedNull(null)) === LiftedNull(LiftedNull(null))
-      NonNull(LiftedNull(LiftedNull(null))) === LiftedNull(LiftedNull(LiftedNull(null)))
+      NonNull(NonNull(null)) === LiftedNull(LiftedNull(null))
+      NonNull(NonNull(NonNull(null))) === LiftedNull(LiftedNull(LiftedNull(null)))
 
       NonNull("") === ""
     }
