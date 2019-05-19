@@ -1,15 +1,15 @@
 package sgn.ops
 
-import sgn.{BoxedNull, LiftedNullness}
+import sgn.LiftedNullness
 
 class NullableOps[A] private[sgn] (private val value: Any) extends AnyVal {
   def isEmpty: Boolean =
-    value == BoxedNull
+    value == null
 
   def get: A = {
     val r =
       value match {
-        case BoxedNull => throw new NoSuchElementException("Nullable.get")
+        case null => throw new NoSuchElementException("Nullable.get")
         case LiftedNullness(n) => n
         case _ => value
       }

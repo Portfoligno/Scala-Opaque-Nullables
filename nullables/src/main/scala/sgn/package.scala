@@ -51,7 +51,7 @@ package object sgn {
 
     implicit def toNullableOps[A](value: Nullable[A]): NullableOps[A] =
       new NullableOps[A](value match {
-        case null => BoxedNull
+        case null => null
         case _ => value
       })
   }
