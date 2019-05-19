@@ -1,3 +1,4 @@
+import sgn.ops.NullableOps
 
 package object sgn {
   type InherentNullness[+A] = Null <:< A
@@ -7,7 +8,7 @@ package object sgn {
 
   type NonNull[+A] = Nullable[A] with NonNull.Tag
 
-  type Nullable[+A] = Any with Nullable.Tag
+  type Nullable[+A] = Nullable.Base with Nullable.Tag
 
 
   object Null {
@@ -39,6 +40,7 @@ package object sgn {
   }
 
   object Nullable {
+    private[sgn] type Base = Any { type Tag }
     private[sgn] trait Tag extends Any
 
     def fromInherentNullable[A : InherentNullness](value: A): Nullable[A] =
