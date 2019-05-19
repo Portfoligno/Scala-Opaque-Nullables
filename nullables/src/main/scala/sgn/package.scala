@@ -1,7 +1,7 @@
 import sgn.ops.NullableOps
 
 package object sgn {
-  type InherentNullness[+A] = Null <:< A
+  type InherentNullness[+A] = scala.Null <:< A
 
 
   type Null = Nullable[Nothing] with Null.Tag
