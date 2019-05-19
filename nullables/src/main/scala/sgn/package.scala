@@ -27,8 +27,8 @@ package object sgn {
     def apply[A](value: A): NonNull[A] = {
       val r =
         value match {
-          case n: LiftedNullness => LiftedNullness(n)
-          case null => LiftedNullness(null)
+          case n: LiftedNull => LiftedNull(n)
+          case null => LiftedNull(null)
           case _ => value
         }
 

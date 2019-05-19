@@ -1,6 +1,6 @@
 package sgn.ops
 
-import sgn.LiftedNullness
+import sgn.LiftedNull
 
 class NullableOps[A] private[sgn] (private val value: Any) extends AnyVal {
   def isEmpty: Boolean =
@@ -10,7 +10,7 @@ class NullableOps[A] private[sgn] (private val value: Any) extends AnyVal {
     val r =
       value match {
         case null => throw new NoSuchElementException("Nullable.get")
-        case LiftedNullness(n) => n
+        case LiftedNull(n) => n
         case _ => value
       }
 
