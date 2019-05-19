@@ -13,9 +13,11 @@ class NullableSpec extends FreeSpec {
       assert(Nullable.fromInherentNullable("") === "")
     }
     "`toInherentNullable` should work" in {
+      Nullable.toInherentNullable(null)
       Nullable.toInherentNullable(Null())
       Nullable.toInherentNullable(NonNull(""))
 
+      assert(Nullable.toInherentNullable(null: Nullable[String]) === null)
       assert(Nullable.toInherentNullable(Null(): Nullable[String]) === null)
       assert(Nullable.toInherentNullable(NonNull(""): Nullable[String]) === "")
     }
