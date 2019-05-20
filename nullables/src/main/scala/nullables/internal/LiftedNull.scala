@@ -1,4 +1,3 @@
-package nullables
+package nullables.internal
 
-private[nullables]
 final case class LiftedNull(value: LiftedNull)

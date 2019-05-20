@@ -1,3 +1,4 @@
+import nullables.internal.LiftedNull
 import nullables.ops.{NonNullOps, NullableOps}
 
 package object nullables {

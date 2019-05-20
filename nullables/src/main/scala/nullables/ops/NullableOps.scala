@@ -1,6 +1,7 @@
 package nullables.ops
 
-import nullables.{InherentNullness, LiftedNull, NonNull, Nullable}
+import nullables.internal.LiftedNull
+import nullables.{InherentNullness, NonNull, Nullable}
 
 class NullableOps[+A](private val v: Nullable[A]) extends AnyVal {
   def isEmpty: Boolean =
