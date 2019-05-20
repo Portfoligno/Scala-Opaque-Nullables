@@ -2,7 +2,7 @@ package nullables.ops
 
 import nullables.{NonNull, Nullable}
 
-class NullableProduct[+A] private[nullables] (private val v1: NonNull[Nullable[A]]) extends AnyVal with Product {
+class NullableProduct[+A] private[ops] (private val v1: NonNull[Nullable[A]]) extends AnyVal with Product {
   override
   def productElement(n: Int): Any = {
     if (n == 0) {

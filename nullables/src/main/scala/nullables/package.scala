@@ -1,4 +1,4 @@
-import nullables.ops.{NonNullOps, NullableOps, NullableProduct}
+import nullables.ops.{NonNullOps, NullableOps}
 
 package object nullables {
   type InherentNullness[+A] = scala.Null <:< A
@@ -20,7 +20,4 @@ package object nullables {
 
   implicit def toNullableOps[A](value: Nullable[A]): NullableOps[A] =
     new NullableOps[A](value)
-
-  implicit def toNullableProduct[A](value: Nullable[A]): NullableProduct[A] =
-    new NullableProduct[A](NonNull(value))
 }

@@ -90,6 +90,9 @@ class NullableOps[+A](private val v: Nullable[A]) extends AnyVal {
 
   def toOption: Option[A] =
     fold(None: Option[A])(Some(_))
+
+  def toProduct: NullableProduct[A] =
+    new NullableProduct[A](NonNull(v))
 }
 
 class NullableWithFilter[+A](v: Nullable[A])(p: A => Boolean) {
