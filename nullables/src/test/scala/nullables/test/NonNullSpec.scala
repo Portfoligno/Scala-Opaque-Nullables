@@ -10,11 +10,11 @@ import org.scalatestplus.junit.JUnitRunner
 class NonNullSpec extends FreeSpec {
   "`NonNull`" - {
     "`apply` should work" in {
-      NonNull(Null) === LiftedNull(null)
-      NonNull(NonNull(Null)) === LiftedNull(LiftedNull(null))
-      NonNull(NonNull(NonNull(Null))) === LiftedNull(LiftedNull(LiftedNull(null)))
+      assert(NonNull(Null) === LiftedNull(null))
+      assert(NonNull(NonNull(Null)) === LiftedNull(LiftedNull(null)))
+      assert(NonNull(NonNull(NonNull(Null))) === LiftedNull(LiftedNull(LiftedNull(null))))
 
-      NonNull("") === ""
+      assert(NonNull("") === "")
     }
     "`unapply` should work" in {
       Nullable.fromInherentNullable("") match {
