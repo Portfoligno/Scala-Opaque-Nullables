@@ -46,6 +46,9 @@ package object nullables {
     private[nullables] type Base = Any { type Tag }
     private[nullables] trait Tag[+A] extends Any
 
+    def empty[A]: Nullable[A] =
+      null
+
     def fromInherentNullable[A : InherentNullness](value: A): Nullable[A] =
       value.asInstanceOf[Nullable[A]]
 
