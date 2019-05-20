@@ -18,8 +18,8 @@ package object nullables {
     def apply(): Null =
       null
 
-    def unapply(arg: Nullable[_]): Boolean =
-      arg == null
+    def unapply(value: Nullable[_]): Boolean =
+      value == null
   }
 
   object NonNull {
