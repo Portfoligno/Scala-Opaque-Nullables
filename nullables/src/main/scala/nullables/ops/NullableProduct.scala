@@ -26,4 +26,10 @@ class NullableProduct[+A] private[ops] (private val v1: NonNull[Nullable[A]]) ex
   override
   def productPrefix: String =
     if (v1.value.isDefined) "NonNull" else "Null"
+
+  override
+  def toString: String = {
+    val v = v1.value
+    if (v.isDefined) s"NonNull($v)" else "Null"
+  }
 }
