@@ -1,30 +1,30 @@
 package nullables.ops
 
 import nullables.internal.LiftedNull
-import nullables.{InherentNullness, NonNull, Nullable}
+import nullables.{InherentNullness, NonNull, Null, Nullable}
 
 class NullableOps[+A](private val v: Nullable[A]) extends AnyVal {
   def isEmpty: Boolean =
-    v == null
+    v == Null
 
   def isDefined: Boolean =
-    v != null
+    v != Null
 
   def get: A =
     (v: Any) match {
       case LiftedNull(n) => n.asInstanceOf[A]
-      case null => throw new NoSuchElementException("Null().get")
+      case Null => throw new NoSuchElementException("Null.get")
       case _ => v.asInstanceOf[A]
     }
 
   def getOrElse[B >: A](default: => B): B =
     (v: Any) match {
       case LiftedNull(n) => n.asInstanceOf[A]
-      case null => default
+      case Null => default
       case _ => v.asInstanceOf[A]
     }
 
-  def orNull[A1 >: A](implicit ev: InherentNullness[A1]): A1 =
+  def orInherentNull[A1 >: A](implicit ev: InherentNullness[A1]): A1 =
     getOrElse(ev(null))
 
   def map[B](f: A => B): Nullable[B] =
@@ -33,21 +33,21 @@ class NullableOps[+A](private val v: Nullable[A]) extends AnyVal {
   def fold[B](ifEmpty: => B)(f: A => B): B =
     (v: Any) match {
       case LiftedNull(n) => f(n.asInstanceOf[A])
-      case null => ifEmpty
+      case Null => ifEmpty
       case _ => f(v.asInstanceOf[A])
     }
 
   def flatMap[B](f: A => Nullable[B]): Nullable[B] =
-    fold(null: Nullable[B])(f)
+    fold(Null: Nullable[B])(f)
 
   def flatten[B](implicit ev: A <:< Nullable[B]): Nullable[B] =
     flatMap(ev)
 
   final def filter(p: A => Boolean): Nullable[A] =
-    if (!exists(p)) null else v
+    if (!exists(p)) Null else v
 
   final def filterNot(p: A => Boolean): Nullable[A] =
-    if (forall(p)) null else v
+    if (forall(p)) Null else v
 
   def nonEmpty: Boolean =
     isDefined
@@ -71,8 +71,8 @@ class NullableOps[+A](private val v: Nullable[A]) extends AnyVal {
     flatMap(pf.lift.andThen(Nullable.fromOption))
 
   def orElse[B >: A](alternative: => Nullable[B]): Nullable[B] =
-    v match {
-      case null => alternative
+    (v: Any) match {
+      case Null => alternative
       case _ => v
     }
 

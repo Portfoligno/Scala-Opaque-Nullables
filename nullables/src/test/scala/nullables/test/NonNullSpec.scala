@@ -1,33 +1,27 @@
 package nullables.test
 
 import nullables.internal.LiftedNull
+import nullables.{NonNull, Null, Nullable}
 import org.junit.runner.RunWith
 import org.scalatest.FreeSpec
 import org.scalatestplus.junit.JUnitRunner
-import nullables.{NonNull, Null, Nullable}
 
 @RunWith(classOf[JUnitRunner])
 class NonNullSpec extends FreeSpec {
   "`NonNull`" - {
     "`apply` should work" in {
-      NonNull(null) === LiftedNull(null)
-      NonNull(NonNull(null)) === LiftedNull(LiftedNull(null))
-      NonNull(NonNull(NonNull(null))) === LiftedNull(LiftedNull(LiftedNull(null)))
+      NonNull(Null) === LiftedNull(null)
+      NonNull(NonNull(Null)) === LiftedNull(LiftedNull(null))
+      NonNull(NonNull(NonNull(Null))) === LiftedNull(LiftedNull(LiftedNull(null)))
 
       NonNull("") === ""
     }
     "`unapply` should work" in {
-      Nullable.fromInherentNullable(null) match {
-        case Null() =>
-      }
-      Nullable.fromInherentNullable(null) match {
-        case null =>
-      }
       Nullable.fromInherentNullable("") match {
         case NonNull("") =>
       }
 
-      NonNull(null) match {
+      NonNull(Null) match {
         case NonNull(null) =>
       }
       NonNull("") match {
@@ -36,7 +30,7 @@ class NonNullSpec extends FreeSpec {
     }
 
     "`value` should work" in {
-      assert(NonNull(null: String).value === null)
+      assert(NonNull(Null).value === Null)
       assert(NonNull("").value === "")
       assert(NonNull(0).value === 0)
     }
