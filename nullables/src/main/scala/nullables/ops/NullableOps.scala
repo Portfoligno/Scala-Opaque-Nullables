@@ -93,6 +93,9 @@ class NullableOps[+A](private val v: Nullable[A]) extends AnyVal {
 
   def toProduct: NullableProduct[A] =
     new NullableProduct[A](NonNull(v))
+
+  def toIterable: Iterable[A] =
+    toList
 }
 
 class NullableWithFilter[+A](v: Nullable[A])(p: A => Boolean) {
