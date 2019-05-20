@@ -31,6 +31,11 @@ val useMacroParadise: Boolean by lazy {
   useMacroParadise?.toBoolean() == true
 }
 
+val usePartialUnification: Boolean by lazy {
+  val usePartialUnification: String? by project
+  usePartialUnification?.toBoolean() == true
+}
+
 val scalaTestVersion: String by lazy {
   val scalaTestVersion: String? by project
   scalaTestVersion ?: "3.0.7"
@@ -56,6 +61,9 @@ var BaseScalaCompileOptions.parameters: List<String>
 tasks.withType<ScalaCompile> {
   if (!useMacroParadise) {
     scalaCompileOptions.parameters += "-Ymacro-annotations"
+  }
+  if (usePartialUnification) {
+    scalaCompileOptions.parameters += "-Ypartial-unification"
   }
   scalaCompileOptions.parameters += listOf(
       "-Xplugin:" + scalaCompilerPlugin.asPath,

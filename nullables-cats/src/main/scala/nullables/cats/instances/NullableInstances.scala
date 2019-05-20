@@ -127,9 +127,7 @@ trait NullableInstances extends nullables.cats.instances.kernel.NullableInstance
         case Null    => "Null"
       }
     }
-}
 
-trait NullableInstancesBinCompat0 {
   implicit val nullablesCatsTraverseFilterForNullable: TraverseFilter[Nullable] = new TraverseFilter[Nullable] {
     val traverse: Traverse[Nullable] = nullables.cats.instances.nullable.nullablesCatsInstancesForNullable
 
