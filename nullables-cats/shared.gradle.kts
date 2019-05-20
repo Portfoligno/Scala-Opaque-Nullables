@@ -1,5 +1,5 @@
 
-val baseName = "nullables"
+val baseName = "nullables-cats"
 
 project.the<SourceSetContainer>().apply {
   getByName("main") {
@@ -44,6 +44,8 @@ dependencies {
     scalaCompilerPlugin("org.scalamacros", "paradise_$scalaVersion", "2.1.1")
   }
   "api"("org.scala-lang", "scala-library", scalaVersion)
+  "api"("org.typelevel", "cats-core_$dependencyScalaVersion", "2.0.0-M1")
+  "api"(project(":nullables_$scalaMinorVersion", "default"))
 
   "testImplementation"("junit", "junit", "4.12")
   "testImplementation"("org.scalatest", "scalatest_$dependencyScalaVersion", scalaTestVersion)

@@ -4,4 +4,5 @@ sequenceOf(
 )
     .forEach {
       include("nullables_$it")
+      include("nullables-cats_$it")
     }
