@@ -16,10 +16,10 @@ package object nullables extends LowPriorityImplicits {
   val Null: Null = null
 
 
-  implicit def toNonNullOps[A](value: NonNull[A]): NonNullOps[A] =
+  implicit def nullablesToNonNullOps[A](value: NonNull[A]): NonNullOps[A] =
     new NonNullOps[A](value)
 
-  implicit def toNullableOps[A](value: Nullable[A]): NullableOps[A] =
+  implicit def nullablesToNullableOps[A](value: Nullable[A]): NullableOps[A] =
     new NullableOps[A](value match {
       case null => BoxedNull
       case _ => value
