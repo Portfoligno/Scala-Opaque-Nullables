@@ -128,9 +128,6 @@ class NullableOps[+A] private[nullables] (private val v: Any) extends AnyVal wit
   override
   def toString: String =
     productString
-
-  def toIterable: Iterable[A] =
-    toList
 }
 
 class NullableWithFilter[+A] private[ops] (v: Any)(p: A => Boolean) {

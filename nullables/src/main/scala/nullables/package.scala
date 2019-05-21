@@ -1,7 +1,7 @@
 import nullables.internal.BoxedNull
 import nullables.ops.{NonNullOps, NullableOps}
 
-package object nullables {
+package object nullables extends LowPriorityImplicits {
   type InherentNullness[+A] = scala.Null <:< A
 
   type Null = Base with NullTag
