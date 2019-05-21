@@ -3,7 +3,7 @@ package nullables.ops
 import nullables.internal.{BoxedNull, LiftedNull}
 import nullables.{InherentNullness, NonNull, Null, Nullable}
 
-class NullableOps[+A] private[nullables] (private val v: Any) extends AnyVal {
+class NullableOps[+A] private[nullables] (private val v: Any) extends AnyVal with Product {
   def isEmpty: Boolean =
     v == BoxedNull
 
@@ -11,14 +11,14 @@ class NullableOps[+A] private[nullables] (private val v: Any) extends AnyVal {
     v != BoxedNull
 
   def get: A =
-    (v: Any) match {
+    v match {
       case BoxedNull => throw new NoSuchElementException("Null.get")
       case LiftedNull(n) => n.asInstanceOf[A]
       case _ => v.asInstanceOf[A]
     }
 
   def getOrElse[B >: A](default: => B): B =
-    (v: Any) match {
+    v match {
       case BoxedNull => default
       case LiftedNull(n) => n.asInstanceOf[A]
       case _ => v.asInstanceOf[A]
@@ -31,7 +31,7 @@ class NullableOps[+A] private[nullables] (private val v: Any) extends AnyVal {
     flatMap(a => NonNull(f(a)))
 
   def fold[B](ifEmpty: => B)(f: A => B): B =
-    (v: Any) match {
+    v match {
       case BoxedNull => ifEmpty
       case LiftedNull(n) => f(n.asInstanceOf[A])
       case _ => f(v.asInstanceOf[A])
@@ -71,7 +71,7 @@ class NullableOps[+A] private[nullables] (private val v: Any) extends AnyVal {
     flatMap(pf.lift.andThen(Nullable.fromOption))
 
   def orElse[B >: A](alternative: => Nullable[B]): Nullable[B] =
-    (v: Any) match {
+    v match {
       case BoxedNull => alternative
       case _ => v.asInstanceOf[Nullable[A]]
     }
@@ -91,15 +91,46 @@ class NullableOps[+A] private[nullables] (private val v: Any) extends AnyVal {
   def toOption: Option[A] =
     fold(None: Option[A])(Some(_))
 
-  def toProduct: NullableProduct[A] =
-    new NullableProduct[A](v)
+  override
+  def productElement(n: Int): Any =
+    if (n == 0 && v != BoxedNull) {
+      v match {
+        case LiftedNull(x) => x
+        case _ => v
+      }
+    } else {
+      throw new IndexOutOfBoundsException(String.valueOf(n))
+    }
 
-  def toIterable: Iterable[A] =
-    toList
+  override
+  def productArity: Int =
+    if (v != BoxedNull) 1 else 0
+
+  override
+  def canEqual(that: Any): Boolean =
+    true
+
+  override
+  def productPrefix: String =
+    if (v != BoxedNull) "NonNull" else "Null"
+
+  def productString: String = {
+    def go(v: Any): String =
+      v match {
+        case BoxedNull => "Null"
+        case LiftedNull(x) => s"NonNull(${go(x)})"
+        case _ => s"NonNull($v)"
+      }
+
+    go(v)
+  }
 
   override
   def toString: String =
-    toProduct.toString
+    productString
+
+  def toIterable: Iterable[A] =
+    toList
 }
 
 class NullableWithFilter[+A] private[ops] (v: Any)(p: A => Boolean) {
