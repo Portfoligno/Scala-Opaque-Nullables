@@ -1,3 +1,4 @@
+import nullables.internal.BoxedNull
 import nullables.ops.{NonNullOps, NullableOps}
 
 package object nullables {
@@ -10,7 +11,7 @@ package object nullables {
   private[nullables] type Base = Any { type Tag }
   private[nullables] trait NonNullTag[+A] extends NullableTag[A]
   private[nullables] trait NullTag extends NullableTag[Nothing]
-  private[nullables] sealed trait NullableTag[+A] extends Any
+  private[nullables] trait NullableTag[+A] extends Any
 
   val Null: Null = null
 
@@ -19,5 +20,8 @@ package object nullables {
     new NonNullOps[A](value)
 
   implicit def toNullableOps[A](value: Nullable[A]): NullableOps[A] =
-    new NullableOps[A](value)
+    new NullableOps[A](value match {
+      case null => BoxedNull
+      case _ => value
+    })
 }

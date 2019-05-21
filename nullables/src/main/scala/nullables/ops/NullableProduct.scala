@@ -1,23 +1,22 @@
 package nullables.ops
 
-import nullables.{NonNull, Nullable}
+import nullables.internal.{BoxedNull, LiftedNull}
 
-class NullableProduct[+A] private[ops] (private val v1: NonNull[Nullable[A]]) extends AnyVal with Product {
+class NullableProduct[+A] private[ops] (private val v: Any) extends AnyVal with Product {
   override
-  def productElement(n: Int): Any = {
-    if (n == 0) {
-      val v = v1.value
-
-      if (v.isDefined) {
-        return v.get
+  def productElement(n: Int): Any =
+    if (n == 0 && v != BoxedNull) {
+      v match {
+        case LiftedNull(x) => x
+        case _ => v
       }
+    } else {
+      throw new IndexOutOfBoundsException(String.valueOf(n))
     }
-    throw new IndexOutOfBoundsException(String.valueOf(n))
-  }
 
   override
   def productArity: Int =
-    if (v1.value.isDefined) 1 else 0
+    if (v != BoxedNull) 1 else 0
 
   override
   def canEqual(that: Any): Boolean =
@@ -25,11 +24,17 @@ class NullableProduct[+A] private[ops] (private val v1: NonNull[Nullable[A]]) ex
 
   override
   def productPrefix: String =
-    if (v1.value.isDefined) "NonNull" else "Null"
+    if (v != BoxedNull) "NonNull" else "Null"
 
   override
   def toString: String = {
-    val v = v1.value
-    if (v.isDefined) s"NonNull($v)" else "Null"
+    def go(v: Any): String =
+      v match {
+        case BoxedNull => "Null"
+        case LiftedNull(x) => s"NonNull(${go(x)})"
+        case _ => s"NonNull($v)"
+      }
+
+    go(v)
   }
 }

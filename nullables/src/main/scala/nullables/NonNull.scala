@@ -8,7 +8,7 @@ object NonNull {
     val r =
       value match {
         case n: LiftedNull => LiftedNull(n)
-        case Null => LiftedNull(null)
+        case null => LiftedNull(null)
         case _ => value
       }
 

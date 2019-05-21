@@ -1,26 +1,26 @@
 package nullables.ops
 
-import nullables.internal.LiftedNull
+import nullables.internal.{BoxedNull, LiftedNull}
 import nullables.{InherentNullness, NonNull, Null, Nullable}
 
-class NullableOps[+A](private val v: Nullable[A]) extends AnyVal {
+class NullableOps[+A] private[nullables] (private val v: Any) extends AnyVal {
   def isEmpty: Boolean =
-    v == Null
+    v == BoxedNull
 
   def isDefined: Boolean =
-    v != Null
+    v != BoxedNull
 
   def get: A =
     (v: Any) match {
+      case BoxedNull => throw new NoSuchElementException("Null.get")
       case LiftedNull(n) => n.asInstanceOf[A]
-      case Null => throw new NoSuchElementException("Null.get")
       case _ => v.asInstanceOf[A]
     }
 
   def getOrElse[B >: A](default: => B): B =
     (v: Any) match {
+      case BoxedNull => default
       case LiftedNull(n) => n.asInstanceOf[A]
-      case Null => default
       case _ => v.asInstanceOf[A]
     }
 
@@ -32,8 +32,8 @@ class NullableOps[+A](private val v: Nullable[A]) extends AnyVal {
 
   def fold[B](ifEmpty: => B)(f: A => B): B =
     (v: Any) match {
+      case BoxedNull => ifEmpty
       case LiftedNull(n) => f(n.asInstanceOf[A])
-      case Null => ifEmpty
       case _ => f(v.asInstanceOf[A])
     }
 
@@ -44,10 +44,10 @@ class NullableOps[+A](private val v: Nullable[A]) extends AnyVal {
     flatMap(ev)
 
   final def filter(p: A => Boolean): Nullable[A] =
-    if (!exists(p)) Null else v
+    if (!exists(p)) Null else v.asInstanceOf[Nullable[A]]
 
   final def filterNot(p: A => Boolean): Nullable[A] =
-    if (forall(p)) Null else v
+    if (forall(p)) Null else v.asInstanceOf[Nullable[A]]
 
   def nonEmpty: Boolean =
     isDefined
@@ -72,8 +72,8 @@ class NullableOps[+A](private val v: Nullable[A]) extends AnyVal {
 
   def orElse[B >: A](alternative: => Nullable[B]): Nullable[B] =
     (v: Any) match {
-      case Null => alternative
-      case _ => v
+      case BoxedNull => alternative
+      case _ => v.asInstanceOf[Nullable[A]]
     }
 
   def iterator: Iterator[A] =
@@ -92,7 +92,7 @@ class NullableOps[+A](private val v: Nullable[A]) extends AnyVal {
     fold(None: Option[A])(Some(_))
 
   def toProduct: NullableProduct[A] =
-    new NullableProduct[A](NonNull(v))
+    new NullableProduct[A](v)
 
   def toIterable: Iterable[A] =
     toList
@@ -102,15 +102,15 @@ class NullableOps[+A](private val v: Nullable[A]) extends AnyVal {
     toProduct.toString
 }
 
-class NullableWithFilter[+A](v: Nullable[A])(p: A => Boolean) {
+class NullableWithFilter[+A] private[ops] (v: Any)(p: A => Boolean) {
   def map[B](f: A => B): Nullable[B] =
-    v.filter(p).map(f)
+    new NullableOps(v).filter(p).map(f)
 
   def flatMap[B](f: A => Nullable[B]): Nullable[B] =
-    v.filter(p).flatMap(f)
+    new NullableOps(v).filter(p).flatMap(f)
 
   def foreach[U](f: A => U): Unit =
-    v.filter(p).foreach(f)
+    new NullableOps(v).filter(p).foreach(f)
 
   def withFilter(q: A => Boolean): NullableWithFilter[A] =
     new NullableWithFilter[A](v)(x => p(x) && q(x))
