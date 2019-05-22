@@ -48,7 +48,7 @@ dependencies {
   "api"(project(":nullables_$scalaMinorVersion", "default"))
 
   "testImplementation"("junit", "junit", "4.12")
-  "testImplementation"("org.scalatest", "scalatest_$dependencyScalaVersion", scalaTestVersion)
+  "testImplementation"("org.typelevel", "cats-testkit_$dependencyScalaVersion", "2.0.0-M1")
 }
 
 var BaseScalaCompileOptions.parameters: List<String>
