@@ -1,17 +1,14 @@
 
 val baseName = "nullables"
 
-project.the<SourceSetContainer>().apply {
-  getByName("main") {
-    withConvention(ScalaSourceSet::class) {
-      scala.srcDir("../$baseName/src/main/scala")
-    }
-  }
-  getByName("test") {
-    withConvention(ScalaSourceSet::class) {
-      scala.srcDir("../$baseName/src/test/scala")
-    }
-  }
+val sourceSets = project.the<SourceSetContainer>()
+val SourceSetContainer.main get() = getByName("main")
+val SourceSetContainer.test get() = getByName("test")
+val SourceSet.scala get() = withConvention(ScalaSourceSet::class) { scala }
+
+sourceSets.apply {
+  main.scala.srcDir("../$baseName/src/main/scala")
+  test.scala.srcDir("../$baseName/src/test/scala")
 }
 val scalaCompilerPlugin: Configuration = configurations.create("scalaCompilerPlugin")
 
@@ -71,3 +68,10 @@ tasks.withType<ScalaCompile> {
       "-language:higherKinds",
       "-language:implicitConversions")
 }
+
+val scalaTest by tasks.registering(JavaExec::class) {
+  main = "org.scalatest.tools.Runner"
+  args = listOf("-R", "${sourceSets.test.scala.outputDir}", "-o")
+  classpath = sourceSets.test.runtimeClasspath
+}
+tasks["test"].dependsOn(scalaTest)

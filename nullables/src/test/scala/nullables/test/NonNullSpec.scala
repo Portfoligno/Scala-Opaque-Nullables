@@ -2,11 +2,8 @@ package nullables.test
 
 import nullables.internal.LiftedNull
 import nullables.{NonNull, Null, Nullable}
-import org.junit.runner.RunWith
 import org.scalatest.FreeSpec
-import org.scalatestplus.junit.JUnitRunner
 
-@RunWith(classOf[JUnitRunner])
 class NonNullSpec extends FreeSpec {
   "`NonNull`" - {
     "`apply` should work" in {
