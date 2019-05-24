@@ -1,17 +1,19 @@
 
 val baseName = "nullables"
 
+// Substitutes for generated extension properties
 val sourceSets = project.the<SourceSetContainer>()
 val SourceSetContainer.main get() = getByName("main")
 val SourceSetContainer.test get() = getByName("test")
 val SourceSet.scala get() = withConvention(ScalaSourceSet::class) { scala }
 
+// Add shared sources
 sourceSets.apply {
   main.scala.srcDir("../$baseName/src/main/scala")
   test.scala.srcDir("../$baseName/src/test/scala")
 }
-val scalaCompilerPlugin: Configuration = configurations.create("scalaCompilerPlugin")
 
+// Load gradle.properties
 val scalaVersion: String by lazy {
   val scalaVersion: String? by project
   scalaVersion ?: scalaMinorVersion
@@ -38,6 +40,9 @@ val scalaTestVersion: String by lazy {
   scalaTestVersion ?: "3.0.7"
 }
 
+// Dependencies
+val scalaCompilerPlugin: Configuration = configurations.create("scalaCompilerPlugin")
+
 repositories {
   jcenter()
 }
@@ -47,10 +52,10 @@ dependencies {
   }
   "api"("org.scala-lang", "scala-library", scalaVersion)
 
-  "testImplementation"("junit", "junit", "4.12")
   "testImplementation"("org.scalatest", "scalatest_$dependencyScalaVersion", scalaTestVersion)
 }
 
+// Compiler options
 var BaseScalaCompileOptions.parameters: List<String>
   get() = additionalParameters ?: listOf()
   set(x) { additionalParameters = x }
@@ -69,6 +74,7 @@ tasks.withType<ScalaCompile> {
       "-language:implicitConversions")
 }
 
+// Scalatest
 val scalaTest by tasks.registering(JavaExec::class) {
   main = "org.scalatest.tools.Runner"
   args = listOf("-R", "${sourceSets.test.scala.outputDir}", "-o")

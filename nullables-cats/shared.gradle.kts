@@ -1,17 +1,19 @@
 
 val baseName = "nullables-cats"
 
+// Substitutes for generated extension properties
 val sourceSets = project.the<SourceSetContainer>()
 val SourceSetContainer.main get() = getByName("main")
 val SourceSetContainer.test get() = getByName("test")
 val SourceSet.scala get() = withConvention(ScalaSourceSet::class) { scala }
 
+// Add shared sources
 sourceSets.apply {
   main.scala.srcDir("../$baseName/src/main/scala")
   test.scala.srcDir("../$baseName/src/test/scala")
 }
-val scalaCompilerPlugin: Configuration = configurations.create("scalaCompilerPlugin")
 
+// Load gradle.properties
 val scalaVersion: String by lazy {
   val scalaVersion: String? by project
   scalaVersion ?: scalaMinorVersion
@@ -38,6 +40,9 @@ val scalaTestVersion: String by lazy {
   scalaTestVersion ?: "3.0.7"
 }
 
+// Dependencies
+val scalaCompilerPlugin: Configuration = configurations.create("scalaCompilerPlugin")
+
 repositories {
   jcenter()
 }
@@ -49,10 +54,10 @@ dependencies {
   "api"("org.typelevel", "cats-core_$dependencyScalaVersion", "2.0.0-M1")
   "api"(project(":nullables_$scalaMinorVersion", "default"))
 
-  "testImplementation"("junit", "junit", "4.12")
   "testImplementation"("org.typelevel", "cats-testkit_$dependencyScalaVersion", "2.0.0-M1")
 }
 
+// Compiler options
 var BaseScalaCompileOptions.parameters: List<String>
   get() = additionalParameters ?: listOf()
   set(x) { additionalParameters = x }
@@ -71,6 +76,7 @@ tasks.withType<ScalaCompile> {
       "-language:implicitConversions")
 }
 
+// Scalatest
 val scalaTest by tasks.registering(JavaExec::class) {
   main = "org.scalatest.tools.Runner"
   args = listOf("-R", "${sourceSets.test.scala.outputDir}", "-o")
